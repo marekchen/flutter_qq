@@ -1,0 +1,41 @@
+group 'com.github.marekchen.flutterqq'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 16
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation files('libs/open_sdk_r6008_lite.jar')
+    api 'com.android.support:support-v4:27.1.1'
+    // 开发时把下面的注释打开并且sync一下，之后再注释掉
+    //api files('libs/flutter.jar')
+}
