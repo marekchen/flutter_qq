@@ -1,3 +1,8 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.2] - 2018.8.6.
 
-* TODO: Describe initial release.
+* support ios
+* complete doc
+
+## [0.0.1] - 2018.5.28.
+
+* support android

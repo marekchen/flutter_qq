@@ -11,25 +11,40 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _output = 'Unknown';
+  String _output = '---';
 
   @override
   initState() {
     super.initState();
   }
 
-  Future<Null> _handleSignIn() async {
+  Future<Null> _handleisQQInstalled() async {
+    var result = await FlutterQq.isQQInstalled();
+    var output;
+    if (result) {
+      output = "QQ已安装";
+    } else {
+      output = "QQ未安装";
+    }
+    setState(() {
+      _output = output;
+    });
+  }
+
+  Future<Null> _handleLogin() async {
     try {
-      try {
-        var qqResult = await FlutterQq.login();
-        setState(() {
-          _output = qqResult.message;
-        });
-      } catch (error) {
-        print("flutter_plugin_qq_example:" + error.toString());
+      var qqResult = await FlutterQq.login();
+      var output;
+      if (qqResult.code == 0) {
+        output = "登录成功" + qqResult.response.toString();
+      } else {
+        output = "登录失败" + qqResult.message;
       }
+      setState(() {
+        _output = output;
+      });
     } catch (error) {
-      print(error);
+      print("flutter_plugin_qq_example:" + error.toString());
     }
   }
 
@@ -42,8 +57,16 @@ class _MyAppState extends State<MyApp> {
     );
     try {
       var qqResult = await FlutterQq.shareToQQ(shareContent);
+      var output;
+      if (qqResult.code == 0) {
+        output = "分享成功";
+      } else if (qqResult.code == 1) {
+        output = "分享失败" + qqResult.message;
+      } else {
+        output = "用户取消";
+      }
       setState(() {
-        _output = qqResult.message;
+        _output = output;
       });
     } catch (error) {
       print("flutter_plugin_qq_example:" + error.toString());
@@ -59,8 +82,16 @@ class _MyAppState extends State<MyApp> {
     );
     try {
       var qqResult = await FlutterQq.shareToQzone(shareContent);
+      var output;
+      if (qqResult.code == 0) {
+        output = "分享成功";
+      } else if (qqResult.code == 1) {
+        output = "分享失败" + qqResult.message;
+      } else {
+        output = "用户取消";
+      }
       setState(() {
-        _output = qqResult.message;
+        _output = output;
       });
     } catch (error) {
       print("flutter_plugin_qq_example:" + error.toString());
@@ -69,16 +100,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    FlutterQq.registerQq('101435528');
+    FlutterQq.registerQQ('101435528');
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          title: new Text('Plugin example app'),
+          title: new Text('Plugin QQ example app'),
         ),
         body: new Column(
           children: <Widget>[
             new RaisedButton(
-              onPressed: _handleSignIn,
+              onPressed: _handleisQQInstalled,
+              child: new Text('isQQInstalled'),
+            ),
+            new RaisedButton(
+              onPressed: _handleLogin,
               child: new Text('login'),
             ),
             new RaisedButton(

@@ -13,6 +13,8 @@ enum SHARE_TO_QZONE_TYPE {
   IMAGE_TEXT, //1
   PUBLISH_MOOD, //3 说说
   PUBLISH_VIDEO, //4 视频
+  IMAGE, //5
+  APP //6
 }
 
 enum QZONE_FLAG {
@@ -35,6 +37,8 @@ class ShareQQContent {
 
   QZONE_FLAG qzoneFlag;
 
+  String ark;
+
   ShareQQContent({
     this.shareType = SHARE_TO_QQ_TYPE.DEFAULT,
     this.title,
@@ -45,6 +49,7 @@ class ShareQQContent {
     this.appName,
     this.audioUrl,
     this.qzoneFlag = QZONE_FLAG.DEFAULT,
+    this.ark,
   });
 }
 
@@ -72,13 +77,18 @@ class ShareQzoneContent {
 class QQResult {
   int code;
   String message;
+  Map<String, dynamic> response;
 }
 
 class FlutterQq {
   static const MethodChannel _channel = const MethodChannel('flutter_qq');
 
-  static void registerQq(String appId) async {
+  static void registerQQ(String appId) async {
     await _channel.invokeMethod('registerQq', {'appId': appId});
+  }
+
+  static Future<bool> isQQInstalled() async {
+    return await _channel.invokeMethod('isQQInstalled');
   }
 
   static Future<QQResult> login() async {
@@ -86,6 +96,7 @@ class FlutterQq {
     QQResult qqResult = new QQResult();
     qqResult.code = result["Code"];
     qqResult.message = result["Message"];
+    qqResult.response = result["Response"];
     return qqResult;
   }
 
@@ -116,6 +127,8 @@ class FlutterQq {
       "appName": shareContent.appName,
       "audioUrl": shareContent.audioUrl,
       "qzoneFlag": shareContent.qzoneFlag.index,
+      // app 信息?
+      "ark": shareContent.ark
     };
     final Map<dynamic, dynamic> result =
         await _channel.invokeMethod('shareToQQ', params);
@@ -135,6 +148,12 @@ class FlutterQq {
       case SHARE_TO_QZONE_TYPE.PUBLISH_VIDEO:
         shareType = 4;
         break;
+      case SHARE_TO_QZONE_TYPE.IMAGE:
+        shareType = 5;
+        break;
+      case SHARE_TO_QZONE_TYPE.APP:
+        shareType = 6;
+        break;
       default:
         shareType = 1;
     }
@@ -144,6 +163,7 @@ class FlutterQq {
       "targetUrl": shareContent.targetUrl,
       "summary": shareContent.summary,
       "imageUrls": shareContent.imageUrls,
+      // app 信息？
       "scene": shareContent.scene,
       "callback": shareContent.callback,
     };
@@ -153,10 +173,5 @@ class FlutterQq {
     qqResult.code = result["Code"];
     qqResult.message = result["Message"];
     return qqResult;
-  }
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
   }
 }

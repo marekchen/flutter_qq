@@ -3,18 +3,19 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_qq'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = 'Flutter plugin for QQ.'
   s.description      = <<-DESC
 Flutter plugin for QQ.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/marekchen/flutter_qq'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'marekchen' => 'c491843272@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.dependency 'QQSDK'
   
   s.ios.deployment_target = '8.0'
 end
