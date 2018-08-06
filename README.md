@@ -25,7 +25,78 @@ Flutter plugin for QQ.
 ```
 
 ### iOS
-1. 
+1. Add the followings to your project's Info.plist
+``` xml
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>tencent</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>tencent1107493622</string>
+    </array>
+  </dict>
+</array>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>mqq</string>
+  <string>mqqapi</string>
+  <string>mqqwpa</string>
+  <string>mqqbrowser</string>
+  <string>mttbrowser</string>
+  <string>mqqOpensdkSSoLogin</string>
+  <string>mqqopensdkapiV2</string>
+  <string>mqqopensdkapiV3</string>
+  <string>mqqopensdkapiV4</string>
+  <string>wtloginmqq2</string>
+  <string>mqzone</string>
+  <string>mqzoneopensdk</string>
+  <string>mqzoneopensdkapi</string>
+  <string>mqzoneopensdkapi19</string>
+  <string>mqzoneopensdkapiV2</string>
+  <string>mqqapiwallet</string>
+  <string>mqqopensdkfriend</string>
+  <string>mqqopensdkdataline</string>
+  <string>mqqgamebindinggroup</string>
+  <string>mqqopensdkgrouptribeshare</string>
+  <string>tencentapi.qq.reqContent</string>
+  <string>tencentapi.qzone.reqContent</string>
+</array>
+<key>NSMicrophoneUsageDescription</key>
+<string>microphoneUsageDescription</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>photoLibraryDesciption</string>
+<key>NSCameraUsageDescription</key>
+<string>cameraUsageDesciption</string>
+<key>LSRequiresIPhoneOS</key>
+<true/>
+<key>UIBackgroundModes</key>
+<array>
+  <string>fetch</string>
+  <string>remote-notification</string>
+</array>
+```
+
+2. Add the followings to your project's AppDelegate.m
+``` objective-c
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+            options:(NSDictionary<NSString*, id> *)options
+{
+    NSString * urlStr = [url absoluteString];
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"QQ" object:nil userInfo:@{@"url":urlStr}];
+    return YES;
+}
+```
+
+## Not Complete
+1. SHARE_TO_QQ_TYPE.AUDIO
+2. SHARE_TO_QZONE_TYPE.PUBLISH_VIDEO
+3. SHARE_TO_QQ_TYPE.APP & SHARE_TO_QZONE_TYPE.APP
+4. SHARE_TO_QZONE_TYPE.IMAGE_TEXT,android & ios don't have same action
 
 ## Api Documentation
 ### Data struct
@@ -61,6 +132,8 @@ Flutter plugin for QQ.
 |IMAGE_TEXT|默认|
 |PUBLISH_MOOD|说说|
 |PUBLISH_VIDEO|视频|
+|IMAGE|图片|
+|APP|应用|
 
 5. ShareQQContent
 
@@ -70,7 +143,7 @@ Flutter plugin for QQ.
 |title|String|title|
 |targetUrl|String|targetUrl|
 |summary|String|summary|
-|imageUrl|String|imageUrl(shareType为IMAGE时，支持imageLocalUrl)|
+|imageUrl|String|imageUrl(shareType为IMAGE时，只支持imageLocalUrl)|
 |imageLocalUrl|String|imageLocalUrl|
 |appName|String|appName|
 |audioUrl|String|audioUrl(只有shareType为AUDIO时支持)|

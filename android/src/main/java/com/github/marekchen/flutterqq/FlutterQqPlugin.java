@@ -90,14 +90,7 @@ public class FlutterQqPlugin implements MethodCallHandler {
 
     private void login(MethodCall call, final OneListener listener) {
         String scopes = (String) call.argument("scopes");
-        if (mTencent.isSessionValid()) {
-            mTencent.login(registrar.activity(), scopes == null ? "get_simple_userinfo" : scopes, listener);
-        } else {
-            Map<String, Object> re = new HashMap<>();
-            re.put("Code", 1);
-            re.put("Message", "session invalid");
-            listener.result.success(re);
-        }
+        mTencent.login(registrar.activity(), scopes == null ? "get_simple_userinfo" : scopes, listener);
     }
 
     private void doShareToQQ(MethodCall call, final OneListener listener) {

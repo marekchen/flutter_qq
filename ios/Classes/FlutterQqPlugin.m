@@ -39,7 +39,7 @@
         }else{
             result(@(NO));
         }
-    } else if([@"login" isEqualToString:call.method]){
+    } else if([@"login" isEqualToString:call.method]) {
         NSArray *scopeArray = nil;
         NSString *scopes = call.arguments[@"scopes"];
         if(scopes && scopes.length){
@@ -48,10 +48,15 @@
         if (scopeArray == nil) {
             scopeArray = @[@"get_user_info", @"get_simple_userinfo"];
         }
-        [_oauth authorize:scopeArray];
-    } else if([@"shareToQQ" isEqualToString:call.method]){
+        if(![_oauth authorize:scopeArray]) {
+            NSMutableDictionary *body = @{@"type":@"QQAuthorizeResponse"}.mutableCopy;
+            body[@"Code"] = @(1);
+            body[@"Message"] = @"login failed";
+            result(body);
+        }
+    } else if([@"shareToQQ" isEqualToString:call.method]) {
         [self shareToQQ:call result:result];
-    } else if([@"shareToQzone" isEqualToString:call.method]){
+    } else if([@"shareToQzone" isEqualToString:call.method]) {
         [self shareToQzone:call result:result];
     }
 }
@@ -65,19 +70,23 @@
     NSString *webpageUrl = call.arguments[@"targetUrl"];
     NSString *audioUrl = call.arguments[@"audioUrl"];
     QQApiObject *message = nil;
-    if(imageUrl.length) {
-    }
-    
+
     if(shareType == SHARE_TO_QQ_TYPE_DEFAULT){
         // news|Image
         message = [QQApiNewsObject objectWithURL:[NSURL URLWithString:webpageUrl] title:title description:description previewImageURL:[NSURL URLWithString:imageUrl]];
     }
     else if(shareType == SHARE_TO_QQ_TYPE_IMAGE){
         // localImage
+        UIImage *image = nil;
         if(imageLocalUrl.length) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:imageLocalUrl]){
+                image = [UIImage imageWithContentsOfFile:imageLocalUrl];
+            }
         }
-        NSData *imageData = nil;//UIImageJPEGRepresentation(imageUrl, 1);
-        message = [QQApiImageObject objectWithData:imageData previewImageData:imageData title:title description:description];
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.80);
+        NSData *previewImageData = UIImageJPEGRepresentation(image, 0.20);
+        message = [QQApiImageObject objectWithData:imageData previewImageData:previewImageData title:title description:description];
+
     }
     else if (shareType == SHARE_TO_QQ_TYPE_AUDIO){
         // audio
@@ -87,7 +96,13 @@
         }
     }
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:message];
-    [QQApiInterface sendReq:req];
+    QQApiSendResultCode code = [QQApiInterface sendReq:req];
+    if(code != EQQAPISENDSUCESS && code != EQQAPIAPPSHAREASYNC){
+        NSMutableDictionary *body = @{@"type":@"QQShareResponse"}.mutableCopy;
+        body[@"Code"] = @(1);
+        body[@"Message"] = [NSString stringWithFormat:@"errorCode：%d", code];
+        result(body);
+    }
 }
 
 - (void)shareToQzone:(FlutterMethodCall*)call result:(FlutterResult)flutterResult{
@@ -95,23 +110,56 @@
     NSString *title = call.arguments[@"title"];
     NSString *description = call.arguments[@"summary"];
     NSString *imageUrl = call.arguments[@"imageUrl"];
-    NSString *imageLocalUrl = call.arguments[@"imageLocalUrl"];
+    NSArray *imageUrls = call.arguments[@"imageUrls"];
     NSString *webpageUrl = call.arguments[@"targetUrl"];
+    NSString *sceneStr = call.arguments[@"scene"];
+    NSString *callBackStr = call.arguments[@"hulian_call_back"];
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    if(![sceneStr isKindOfClass:[NSNull class]]){
+        NSString *checkSceneStr = [sceneStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if (checkSceneStr.length > 0) {
+            [dict setObject:sceneStr forKey:@"hulian_extra_scene"];
+        }
+    }
+    if(![callBackStr isKindOfClass:[NSNull class]]){
+        NSString *checkCallBackStr = [callBackStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if (checkCallBackStr.length > 0) {
+            [dict setObject:callBackStr forKey:@"hulian_call_back"];
+        }
+    }
+    if (dict.count == 0) {
+        dict = nil;
+    }
+    
     QQApiObject *message = nil;
     
-    if(shareType == SHARE_TO_QQ_TYPE_DEFAULT){
-        // news|Image
-        message = [QQApiNewsObject objectWithURL:[NSURL URLWithString:webpageUrl] title:title description:description previewImageURL:[NSURL URLWithString:imageUrl]];
+    if(shareType == SHARE_TO_QZONE_TYPE_IMAGE_TEXT) {
+        // text
+        message = [QQApiImageArrayForQZoneObject objectWithimageDataArray:nil title:title extMap:dict];
     }
-    else if(shareType == SHARE_TO_QQ_TYPE_IMAGE){
-        // localImage
-        if(imageLocalUrl.length) {
+    else if(shareType == SHARE_TO_QZONE_TYPE_IMAGE) {
+        // localImages
+        NSMutableArray *photoArray = [NSMutableArray array];
+        for(NSString *imageUrl in imageUrls){
+            if(imageUrl.length) {
+                if ([[NSFileManager defaultManager] fileExistsAtPath:imageUrl]){
+                    UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
+                    NSData *imageData = UIImageJPEGRepresentation(image, 0.80);
+                    [photoArray addObject:imageData];
+                }
+            }
         }
-        NSData *imageData = nil;//UIImageJPEGRepresentation(imageUrl, 1);
-        message = [QQApiImageObject objectWithData:imageData previewImageData:imageData title:title description:description];
+        message = [QQApiImageArrayForQZoneObject objectWithimageDataArray:photoArray title:title extMap:dict];
     }
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:message];
-    [QQApiInterface SendReqToQZone:req];
+    QQApiSendResultCode code = [QQApiInterface SendReqToQZone:req];
+    if(code != EQQAPISENDSUCESS && code != EQQAPIAPPSHAREASYNC){
+        NSMutableDictionary *body = @{@"type":@"QQShareResponse"}.mutableCopy;
+        body[@"Code"] = @(1);
+        body[@"Message"] = [NSString stringWithFormat:@"errorCode：%d", code];
+        result(body);
+    }
 }
 
 - (BOOL)handleOpenURL:(NSNotification *)aNotification
@@ -143,7 +191,7 @@
         } else {
             body[@"Code"] = @(0);
         }
-        body[@"Message"] = resp.result;
+        body[@"Message"] = sendReq.result;
         result(body);
     }
 }
@@ -159,10 +207,10 @@
     body[@"Code"] = @(0);
     body[@"Message"] = @"Ok";
     NSMutableDictionary *response = @{@"openid":_oauth.openId}.mutableCopy;
-    body[@"openid"] = _oauth.openId;
-    body[@"access_token"] = _oauth.accessToken;
-    body[@"expires_in"] = @([_oauth.expirationDate timeIntervalSince1970]*1000);
-    body[@"oauth_consumer_key"] =_oauth.appId;
+    response[@"openid"] = _oauth.openId;
+    response[@"access_token"] = _oauth.accessToken;
+    response[@"expires_in"] = @([_oauth.expirationDate timeIntervalSince1970]*1000);
+    response[@"oauth_consumer_key"] =_oauth.appId;
     body[@"Response"] = response;
     result(body);
 }

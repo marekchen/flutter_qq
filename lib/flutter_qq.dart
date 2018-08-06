@@ -77,14 +77,14 @@ class ShareQzoneContent {
 class QQResult {
   int code;
   String message;
-  Map<String, dynamic> response;
+  Map<dynamic, dynamic> response;
 }
 
 class FlutterQq {
   static const MethodChannel _channel = const MethodChannel('flutter_qq');
 
   static void registerQQ(String appId) async {
-    await _channel.invokeMethod('registerQq', {'appId': appId});
+    await _channel.invokeMethod('registerQQ', {'appId': appId});
   }
 
   static Future<bool> isQQInstalled() async {
