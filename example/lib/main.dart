@@ -100,19 +100,19 @@ class _MyAppState extends State<MyApp> {
       title: "测试title",
       targetUrl: "https://www.baidu.com",
       summary: "测试summary",
-      imageUrls: ["http://inews.gtimg.com/newsapp_bt/0/876781763/1000","http://inews.gtimg.com/newsapp_bt/0/876781763/1000","http://inews.gtimg.com/newsapp_bt/0/876781763/1000"],
+      imageUrl: "http://inews.gtimg.com/newsapp_bt/0/876781763/1000",
     );
-    // List<String> paths = new List();
-    // for(File image in _images){
-    //   paths.add(image.path);
-    // }
-    // ShareQzoneContent shareContent = new ShareQzoneContent(
-    //   shareType: SHARE_TO_QZONE_TYPE.IMAGE,
-    //   title: "测试title",
-    //   targetUrl: "https://www.baidu.com",
-    //   summary: "测试summary",
-    //   imageUrls: ["http://inews.gtimg.com/newsapp_bt/0/876781763/1000","http://inews.gtimg.com/newsapp_bt/0/876781763/1000","http://inews.gtimg.com/newsapp_bt/0/876781763/1000"],
-    // );
+//     List<String> paths = new List();
+//     for(File image in _images){
+//       paths.add(image.path);
+//     }
+//     ShareQzoneContent shareContent = new ShareQzoneContent(
+//       shareType: SHARE_TO_QZONE_TYPE.IMAGE,
+//       title: "测试title",
+//       targetUrl: "https://www.baidu.com",
+//       summary: "测试summary",
+//       imageUrls: paths,
+//     );
     try {
       var qqResult = await FlutterQq.shareToQzone(shareContent);
       var output;

@@ -136,7 +136,8 @@
     
     if(shareType == SHARE_TO_QZONE_TYPE_IMAGE_TEXT) {
         // text
-        message = [QQApiImageArrayForQZoneObject objectWithimageDataArray:nil title:title extMap:dict];
+        // message = [QQApiImageArrayForQZoneObject objectWithimageDataArray:nil title:title extMap:dict];
+        message = [QQApiNewsObject objectWithURL:[NSURL URLWithString:webpageUrl] title:title description:description previewImageURL:[NSURL URLWithString:imageUrl]];
     }
     else if(shareType == SHARE_TO_QZONE_TYPE_IMAGE) {
         // localImages

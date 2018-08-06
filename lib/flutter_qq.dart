@@ -58,6 +58,7 @@ class ShareQzoneContent {
   String title;
   String targetUrl;
   String summary;
+  String imageUrl;
   List<String> imageUrls;
 
   String scene;
@@ -68,6 +69,7 @@ class ShareQzoneContent {
     this.title,
     this.targetUrl,
     this.summary,
+    this.imageUrl,
     this.imageUrls,
     this.scene,
     this.callback,
@@ -162,6 +164,7 @@ class FlutterQq {
       "title": shareContent.title,
       "targetUrl": shareContent.targetUrl,
       "summary": shareContent.summary,
+      "imageUrl": shareContent.imageUrl,
       "imageUrls": shareContent.imageUrls,
       // app 信息？
       "scene": shareContent.scene,
