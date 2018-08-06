@@ -108,6 +108,15 @@ Flutter plugin for QQ.
 |message|String|错误详情|
 |response|Map|只在login时返回|
 
+response格式为:
+``` json
+{
+  "openid":"xxxxx",
+  "accessToken":"XXXXXXXXX",
+  "expiresAt":"xxxxxxxxx",
+}
+```
+
 2. QZONE_FLAG(enum)
 
 |field|description|

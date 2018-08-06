@@ -208,9 +208,10 @@
     body[@"Message"] = @"Ok";
     NSMutableDictionary *response = @{@"openid":_oauth.openId}.mutableCopy;
     response[@"openid"] = _oauth.openId;
-    response[@"access_token"] = _oauth.accessToken;
-    response[@"expires_in"] = @([_oauth.expirationDate timeIntervalSince1970]*1000);
-    response[@"oauth_consumer_key"] =_oauth.appId;
+    response[@"accessToken"] = _oauth.accessToken;
+    
+    response[@"expiresAt"] = @([_oauth.expirationDate timeIntervalSince1970] * 1000);
+    response[@"appId"] =_oauth.appId;
     body[@"Response"] = response;
     result(body);
 }

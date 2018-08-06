@@ -183,10 +183,11 @@ public class FlutterQqPlugin implements MethodCallHandler {
                 }
                 Map<String, Object> resp = new HashMap<>();
                 try {
+                    Log.i("FlutterQqPlugin", resp.toString());
                     resp.put("openid", jsonResponse.getString(Constants.PARAM_OPEN_ID));
-                    resp.put("access_token", jsonResponse.getString(Constants.PARAM_ACCESS_TOKEN));
-                    resp.put("expires_in", jsonResponse.getLong(Constants.PARAM_EXPIRES_IN));
-                    resp.put("oauth_consumer_key", jsonResponse.getString(Constants.PARAM_CONSUMER_KEY));
+                    resp.put("accessToken", jsonResponse.getString(Constants.PARAM_ACCESS_TOKEN));
+                    resp.put("expiresAt", jsonResponse.getLong(Constants.PARAM_EXPIRES_TIME));
+                    // resp.put("appId", jsonResponse.getString(Constants.PARAM_APP_ID));
                     re.put("Code", 0);
                     re.put("Message", "ok");
                     re.put("Response", resp);

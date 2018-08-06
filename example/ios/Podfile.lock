@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_qq (0.0.2):
+  - flutter_qq (0.0.3):
     - Flutter
     - QQSDK
   - image_picker (0.0.1):
