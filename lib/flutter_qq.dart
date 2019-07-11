@@ -13,7 +13,7 @@ enum SHARE_TO_QZONE_TYPE {
   IMAGE_TEXT, //1
   PUBLISH_MOOD, //3 说说
   PUBLISH_VIDEO, //4 视频
-  IMAGE, //5
+  IMAGE, //5, 貌似QQ不再支持
   APP //6
 }
 

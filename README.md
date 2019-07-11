@@ -141,7 +141,7 @@ response格式为:
 |IMAGE_TEXT|默认|
 |PUBLISH_MOOD|说说|
 |PUBLISH_VIDEO|视频|
-|IMAGE|图片|
+|IMAGE|图片 **貌似QQ已不再支持，不建议使用，可以通过`shareToQQ`中设置`qzoneFlag`为`QZONE_FLAG.AUTO_OPEN`实现**|
 |APP|应用|
 
 5. ShareQQContent
@@ -243,13 +243,14 @@ Future<Null> _handleShareToQQ() async {
 ```
 
 5. shareToQzone
+`shareToQzone`可以通过`shareToQQ`中设置`qzoneFlag`为`QZONE_FLAG.AUTO_OPEN`实现
 ``` dart
 Future<Null> _handleShareToQZone() async {
   ShareQzoneContent shareContent = new ShareQzoneContent(
     title: "测试title",
     targetUrl: "https://www.baidu.com",
     summary: "测试summary",
-    imageUrls: ["http://inews.gtimg.com/newsapp_bt/0/876781763/1000"],
+    imageUrl: "http://inews.gtimg.com/newsapp_bt/0/876781763/1000", // 或者本地图片地址
   );
   try {
     var qqResult = await FlutterQq.shareToQzone(shareContent);

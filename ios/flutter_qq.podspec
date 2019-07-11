@@ -3,8 +3,9 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_qq'
-  s.version          = '0.0.3'
+  s.version          = '0.0.5'
   s.summary          = 'Flutter plugin for QQ.'
+  s.static_framework = true
   s.description      = <<-DESC
 Flutter plugin for QQ.
                        DESC

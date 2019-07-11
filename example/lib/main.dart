@@ -61,19 +61,39 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<Null> _handleShareToQQ() async {
-    // ShareQQContent shareContent = new ShareQQContent(
-    //   shareType: SHARE_TO_QQ_TYPE.DEFAULT,
-    //   title: "测试title",
-    //   targetUrl: "https://www.baidu.com",
-    //   summary: "测试summary",
-    //   imageUrl: "http://inews.gtimg.com/newsapp_bt/0/876781763/1000",
-    // );
+     ShareQQContent shareContent = new ShareQQContent(
+       shareType: SHARE_TO_QQ_TYPE.DEFAULT,
+       title: "测试title",
+       targetUrl: "https://www.baidu.com",
+       summary: "测试summary",
+       imageUrl: "http://inews.gtimg.com/newsapp_bt/0/876781763/1000",
+     );
+    try {
+      var qqResult = await FlutterQq.shareToQQ(shareContent);
+      var output;
+      if (qqResult.code == 0) {
+        output = "分享成功";
+      } else if (qqResult.code == 1) {
+        output = "分享失败" + qqResult.message;
+      } else {
+        output = "用户取消";
+      }
+      setState(() {
+        _output = output;
+      });
+    } catch (error) {
+      print("flutter_plugin_qq_example:" + error.toString());
+
+    }
+  }
+
+  Future<Null> _handleShareToQQWithLocalImage() async {
     ShareQQContent shareContent = new ShareQQContent(
-      shareType: SHARE_TO_QQ_TYPE.IMAGE,
-      title: "测试title",
-      targetUrl: "https://www.baidu.com",
-      summary: "测试summary",
-      imageLocalUrl: _images[0].path
+        shareType: SHARE_TO_QQ_TYPE.IMAGE,
+        title: "测试title",
+        targetUrl: "https://www.baidu.com",
+        summary: "测试summary",
+        imageLocalUrl: _images[0].path
     );
     try {
       var qqResult = await FlutterQq.shareToQQ(shareContent);
@@ -102,17 +122,6 @@ class _MyAppState extends State<MyApp> {
       summary: "测试summary",
       imageUrl: "http://inews.gtimg.com/newsapp_bt/0/876781763/1000",
     );
-//     List<String> paths = new List();
-//     for(File image in _images){
-//       paths.add(image.path);
-//     }
-//     ShareQzoneContent shareContent = new ShareQzoneContent(
-//       shareType: SHARE_TO_QZONE_TYPE.IMAGE,
-//       title: "测试title",
-//       targetUrl: "https://www.baidu.com",
-//       summary: "测试summary",
-//       imageUrls: paths,
-//     );
     try {
       var qqResult = await FlutterQq.shareToQzone(shareContent);
       var output;
@@ -157,6 +166,10 @@ class _MyAppState extends State<MyApp> {
             new RaisedButton(
               onPressed: _handleShareToQQ,
               child: new Text('ShareToQQ'),
+            ),
+            new RaisedButton(
+              onPressed: _handleShareToQQWithLocalImage,
+              child: new Text('ShareToQQ-WithLocalImage'),
             ),
             new RaisedButton(
               onPressed: _handleShareToQZone,

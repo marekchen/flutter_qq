@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.flutter.plugin.common.MethodChannel;
@@ -131,7 +132,10 @@ public class FlutterQqPlugin implements MethodCallHandler {
         params.putString(QzoneShare.SHARE_TO_QQ_TITLE, (String) call.argument("title"));
         params.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, (String) call.argument("summary"));
         params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, (String) call.argument("targetUrl"));
-        params.putStringArrayList(QQShare.SHARE_TO_QQ_IMAGE_URL, (ArrayList<String>) call.argument("imageUrls"));
+        ArrayList<String> list = new ArrayList<>();
+        list.add((String) call.argument("imageUrl"));
+        params.putStringArrayList(QQShare.SHARE_TO_QQ_IMAGE_URL, list);
+        //params.putStringArrayList(QQShare.SHARE_TO_QQ_IMAGE_URL, (ArrayList<String>) call.argument("imageUrls"));
         params.putString(QzonePublish.PUBLISH_TO_QZONE_VIDEO_PATH, (String) call.argument("videoPath"));
         Bundle bundle2 = new Bundle();
         bundle2.putString(QzonePublish.HULIAN_EXTRA_SCENE, (String) call.argument("scene"));
