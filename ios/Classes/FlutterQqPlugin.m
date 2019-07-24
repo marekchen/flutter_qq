@@ -1,4 +1,7 @@
 #import "FlutterQqPlugin.h"
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/QQApiInterfaceObject.h>
 
 @interface FlutterQqPlugin()<QQApiInterfaceDelegate, TencentSessionDelegate> {
     TencentOAuth* _oauth;
