@@ -18,13 +18,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
@@ -52,8 +51,7 @@ public class FlutterQqPlugin implements MethodCallHandler {
 
     @Override
     public void onMethodCall(MethodCall call, Result result) {
-        OneListener listener = new OneListener();
-        registrar.addActivityResultListener(listener);
+        registrar.addActivityResultListener(mListener);
         switch (call.method) {
             case "registerQQ":
                 registerQQ(call, result);
@@ -63,18 +61,18 @@ public class FlutterQqPlugin implements MethodCallHandler {
                 break;
             case "login":
                 isLogin = true;
-                listener.setResult(result);
-                login(call, listener);
+                mListener.setResult(result);
+                login(call, mListener);
                 break;
             case "shareToQQ":
                 isLogin = false;
-                listener.setResult(result);
-                doShareToQQ(call, listener);
+                mListener.setResult(result);
+                doShareToQQ(call, mListener);
                 break;
             case "shareToQzone":
                 isLogin = false;
-                listener.setResult(result);
-                doShareToQzone(call, listener);
+                mListener.setResult(result);
+                doShareToQzone(call, mListener);
                 break;
         }
     }
@@ -158,6 +156,8 @@ public class FlutterQqPlugin implements MethodCallHandler {
             });
         }
     }
+
+    private final OneListener mListener = new OneListener();
 
     private class OneListener implements IUiListener, PluginRegistry.ActivityResultListener {
 
