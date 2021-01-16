@@ -1,4 +1,5 @@
 # flutter_qq
+# [DEPRECATED]
 
 Flutter plugin for QQ.
 
