@@ -5,10 +5,10 @@ PODS:
     - QQSDK
   - image_picker (0.0.1):
     - Flutter
-  - QQSDK (3.3.1)
+  - QQSDK (3.3.3)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
   - flutter_qq (from `.symlinks/plugins/flutter_qq/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
 
@@ -18,7 +18,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
   flutter_qq:
     :path: ".symlinks/plugins/flutter_qq/ios"
   image_picker:
@@ -26,10 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  flutter_qq: c9de12c3b1064e11a093630a43d13cb7db4d44cb
+  flutter_qq: fd560988a312c5c7c077f1f93980badf1de09eed
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
-  QQSDK: 2bb36f564c4771c3092ba9b7e6874651bf179656
+  QQSDK: 97a38fdbd3217626f0ef16321b67c4eb67e7bf9d
 
 PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.7.3

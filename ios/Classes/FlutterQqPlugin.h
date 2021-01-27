@@ -1,7 +1,4 @@
 #import <Flutter/Flutter.h>
-#import <TencentOpenAPI/TencentOAuth.h>
-#import <TencentOpenAPI/QQApiInterface.h>
-#import <TencentOpenAPI/QQApiInterfaceObject.h>
 
 #define SHARE_TO_QQ_TYPE_DEFAULT 1 // 默认（图片文字） news
 #define SHARE_TO_QZONE_TYPE_IMAGE_TEXT 1 // 图片文字 news
